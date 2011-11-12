@@ -1,0 +1,39 @@
+JavaLangExt (JLE)
+=================
+
+Author: Michael Stöckli
+
+A collection of tools for Java inspired by features found in other languages. 
+
+- null coalesce: 
+	in C# 	> result = obj1 ?? obj2
+	in JLE 	> result = coalesce(obj1, obj2)
+
+- tryParse /Int /Long /Float /Double:
+	in C#	> boolean int.tryParse(string, out int)
+	in JLE	> Integer tryParseInt(String)	// can be null 
+
+- isNullOrEmpty:
+	in C#	> boolean string.isNullOrEmpty(String)
+	in JLE	> boolean isNullOrEmpty(String)
+
+- tryWith:
+	in C#	> using(<T extends ICloseable>)
+	in JLE	> tryWith(<T extends Closeable>, Func1)
+
+- chained operations on Iterable<T> types:
+	Example in Java: ext(lotsOfObjects).map(...).filter(...).reduce(...) etc...
+	
+	map can take multiple Func1s:
+	in Clojure	> (map list f1 f2)
+	in JLE		> ext(someObjects).map(f1, f2)
+
+	zip can take multiple Iterables:
+	in JLE		> ext(someObjects).zip(moreObjects, evenMoreObjects)
+
+
+
+
+
+
+
