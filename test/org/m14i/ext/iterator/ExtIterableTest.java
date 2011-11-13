@@ -120,27 +120,37 @@ public class ExtIterableTest {
         strings.add("a");
         strings.add("a");
 
-        List<Integer> expected = new LinkedList<Integer>();
-        expected.add(97);
-        expected.add(97);
-        expected.add(98);
-        expected.add(97);
-        expected.add(97);
+        final List<Tuple2<Integer, String>> expected = new LinkedList<Tuple2<Integer, String>>();
+        expected.add(new Tuple2<Integer, String>(97, "A"));
+        expected.add(new Tuple2<Integer, String>(97, "A"));
+        expected.add(new Tuple2<Integer, String>(98, "B"));
+        expected.add(new Tuple2<Integer, String>(97, "A"));
+        expected.add(new Tuple2<Integer, String>(97, "A"));
 
-        ExtIterable<Integer> it = ext(strings).map(new Func1<String, Integer>() {
-            @Override
-            public Integer apply(String arg) {
-                return arg.hashCode();
-            }
-        });
+        ext(strings)
+                .map(new Func1<String, Integer>() {
+                            @Override
+                            public Integer apply(String arg) {
+                                return arg.hashCode();
+                            }
+                        },
+                        new Func1<String, String>() {
+                            @Override
+                            public String apply(String arg) {
+                                return arg.toUpperCase();  //To change body of implemented methods use File | Settings | File Templates.
+                            }
+                        }
+                )
+                .each(new Proc1<Tuple2<Integer, String>>() {
 
-        //it.each(Procedures.println());
+                    int counter = 0;
 
-        List<Integer> actual = it.as(new ArrayList<Integer>());
-
-        for (int i = 0; i < expected.size(); i++) {
-            Assert.assertEquals(expected.get(i), actual.get(i));
-        }
+                    @Override
+                    public void apply(Tuple2<Integer, String> arg) {
+                        Assert.assertEquals(expected.get(counter).getItem1(), arg.getItem1());
+                        Assert.assertEquals(expected.get(counter++).getItem2(), arg.getItem2());
+                    }
+                });
     }
 
     @Test

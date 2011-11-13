@@ -11,27 +11,27 @@ import java.util.List;
 
 public class IteratorsTest {
     @Test
-    public void testAsInt2() throws Exception {
+    public void testRangeInt2() throws Exception {
 
     }
 
     @Test
-    public void testAsLong2() throws Exception {
+    public void testRangeLong2() throws Exception {
 
     }
 
     @Test
-    public void testAsDouble2() throws Exception {
+    public void testRangeDouble2() throws Exception {
 
     }
 
     @Test
-    public void testAsFloat2() throws Exception {
+    public void testRangeFloat2() throws Exception {
 
     }
 
     @Test
-    public void testAsInt() throws Exception {
+    public void testRangeInt() throws Exception {
 
         List<Integer> expecteds = new ArrayList<Integer>();
         expecteds.add(5);
@@ -52,17 +52,17 @@ public class IteratorsTest {
     }
 
     @Test
-    public void testAsLong() throws Exception {
+    public void testRangeLong() throws Exception {
 
     }
 
     @Test
-    public void testAsDouble() throws Exception {
+    public void testRangeDouble() throws Exception {
 
     }
 
     @Test
-    public void testAsFloat() throws Exception {
+    public void testRangeFloat() throws Exception {
 
     }
 }
