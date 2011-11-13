@@ -21,7 +21,7 @@ public class Ext {
         return new ExtIterableImpl<T>(Arrays.asList(items));
     }
 
-    public static ExtIterable<Byte> ext(byte... items) {
+    public static ExtIterable<Byte> ext(byte[] items) {
         Collection<Byte> bytes = new LinkedList<Byte>();
         for (byte item : items) {
             bytes.add(item);
@@ -29,7 +29,7 @@ public class Ext {
         return ext(bytes);
     }
 
-    public static ExtIterable<Character> ext(char... items) {
+    public static ExtIterable<Character> ext(char[] items) {
         Collection<Character> chars = new LinkedList<Character>();
         for (char item : items) {
             chars.add(item);
@@ -37,7 +37,7 @@ public class Ext {
         return ext(chars);
     }
 
-    public static ExtIterable<Integer> ext(int... items) {
+    public static ExtIterable<Integer> ext(int[] items) {
         Collection<Integer> ints = new LinkedList<Integer>();
         for (int item : items) {
             ints.add(item);
@@ -45,7 +45,7 @@ public class Ext {
         return ext(ints);
     }
 
-    public static ExtIterable<Long> ext(long... items) {
+    public static ExtIterable<Long> ext(long[] items) {
         Collection<Long> longs = new LinkedList<Long>();
         for (long item : items) {
             longs.add(item);
@@ -53,7 +53,7 @@ public class Ext {
         return ext(longs);
     }
 
-    public static ExtIterable<Float> ext(float... items) {
+    public static ExtIterable<Float> ext(float[] items) {
         Collection<Float> floats = new LinkedList<Float>();
         for (float item : items) {
             floats.add(item);
@@ -61,7 +61,7 @@ public class Ext {
         return ext(floats);
     }
 
-    public static ExtIterable<Double> ext(double... items) {
+    public static ExtIterable<Double> ext(double[] items) {
         Collection<Double> doubles = new LinkedList<Double>();
         for (double item : items) {
             doubles.add(item);

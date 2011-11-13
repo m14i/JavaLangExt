@@ -173,7 +173,6 @@ public class ExtIterableTest {
                 return Math.sqrt(arg);
             }
         }).reduce(0.0, Functions.sumDouble());
-
         System.out.println(sum);
     }
 
@@ -189,6 +188,14 @@ public class ExtIterableTest {
                 Assert.assertEquals(expected[count++], arg);
             }
         });
+    }
+
+    @Test
+    public void testToStrings() throws Exception {
+        String expected = "42, 43, 44, 45, 46, 47, 48, 49";
+        String actual = Iterators.rangeInt(42, 50).toStrings().reduce("", Functions.join(", "));
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -228,8 +235,32 @@ public class ExtIterableTest {
     public void testWrap() throws Exception {
 
         String expected = "a/b/c/a/b/c/a/b/c/a";
-        String actual = ext(Arrays.asList("a", "b", "c")).wrap().take(10).reduce("", Functions.join("/"));
+        String actual = ext("a", "b", "c").wrap().take(10).reduce("", Functions.join("/"));
 
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void testSort() throws Exception {
+
+        String expected = "1,2,3,4,5";
+        String actual = ext(3, 2, 1, 5, 4).sort().toStrings().reduce("", Functions.join(","));
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSort2() throws Exception {
+
+        String expected = "5,4,3,2,1";
+        String actual = ext(3, 2, 1, 5, 4).sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                return -a.compareTo(b);
+            }
+        }).toStrings().reduce("", Functions.join(","));
+
+        Assert.assertEquals(expected, actual);
+    }
+
 }

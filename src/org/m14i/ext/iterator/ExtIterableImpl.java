@@ -7,6 +7,7 @@ import org.m14i.ext.tuples.Tuple2;
 import org.m14i.ext.tuples.Tuple3;
 import org.m14i.ext.tuples.Tuple4;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class ExtIterableImpl<T> implements ExtIterable<T> {
@@ -39,14 +40,6 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
             }
         }
         return false;
-    }
-
-    @Override
-    public <X extends Collection<T>> X as(X container) {
-        while (iterator.hasNext()) {
-            container.add(iterator.next());
-        }
-        return container;
     }
 
     @Override
@@ -184,6 +177,26 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
         });
     }
 
+    public ExtIterable<T> sort() {
+        List list = as(new ArrayList());
+        Collections.sort(list);
+        return new ExtIterableImpl<T>(list);
+    }
+
+    public ExtIterable<T> sort(final Comparator<T> comparator) {
+        List<T> list = as(new ArrayList<T>());
+        Collections.sort(list, comparator);
+        return new ExtIterableImpl<T>(list);
+    }
+
+    @Override
+    public <X extends Collection<T>> X as(X container) {
+        while (iterator.hasNext()) {
+            container.add(iterator.next());
+        }
+        return container;
+    }
+
     @Override
     public ExtIterable<T> take(final long num) {
         return new ExtIterableImpl<T>(new ImmutableIterator<T>() {
@@ -198,6 +211,20 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
             public T next() {
                 count++;
                 return iterator.next();
+            }
+        });
+    }
+
+    public ExtIterable<String> toStrings() {
+        return new ExtIterableImpl<String>(new ImmutableIterator<String>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public String next() {
+                return iterator.next().toString();
             }
         });
     }
