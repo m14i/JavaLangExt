@@ -137,7 +137,7 @@ public class ExtIterableTest {
                         new Func1<String, String>() {
                             @Override
                             public String apply(String arg) {
-                                return arg.toUpperCase();  //To change body of implemented methods use File | Settings | File Templates.
+                                return arg.toUpperCase();  
                             }
                         }
                 )
@@ -148,7 +148,8 @@ public class ExtIterableTest {
                     @Override
                     public void apply(Tuple2<Integer, String> arg) {
                         Assert.assertEquals(expected.get(counter).getItem1(), arg.getItem1());
-                        Assert.assertEquals(expected.get(counter++).getItem2(), arg.getItem2());
+                        Assert.assertEquals(expected.get(counter).getItem2(), arg.getItem2());
+                        counter++;
                     }
                 });
     }

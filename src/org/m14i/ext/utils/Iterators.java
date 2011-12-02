@@ -47,7 +47,7 @@ public class Iterators {
 
             @Override
             public boolean hasNext() {
-                return counter < end;
+                return step > 0 ? counter < end : end < counter;
             }
 
             @Override
@@ -66,7 +66,7 @@ public class Iterators {
 
             @Override
             public boolean hasNext() {
-                return counter < end;
+                return step > 0 ? counter < end : end < counter;
             }
 
             @Override
@@ -85,7 +85,7 @@ public class Iterators {
 
             @Override
             public boolean hasNext() {
-                return counter < end;
+                return step > 0 ? counter < end : end < counter;
             }
 
             @Override
@@ -104,7 +104,7 @@ public class Iterators {
 
             @Override
             public boolean hasNext() {
-                return counter < end;
+                return step > 0 ? counter < end : end < counter;
             }
 
             @Override
