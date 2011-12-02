@@ -2,6 +2,7 @@ package org.m14i.ext.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.m14i.ext.methods.Func2;
 import org.m14i.ext.methods.Proc1;
 import org.m14i.ext.tuples.Tuple2;
 
@@ -21,6 +22,17 @@ public class IteratorsTest {
         };
     }
 
+    private <T> Func2<Integer, Tuple2<T, T>, Integer> getAssertEqualsAndCount() {
+        return new Func2<Integer, Tuple2<T, T>, Integer>() {
+            @Override
+            public Integer apply(Integer carry, Tuple2<T, T> arg) {
+                System.out.println(arg);
+                Assert.assertEquals(arg.getItem1(), arg.getItem2());
+                return carry + 1;
+            }
+        };
+    }
+
     @Test
     public void testRangeInt2() throws Exception {
 
@@ -32,22 +44,50 @@ public class IteratorsTest {
         expected.add(6);
         expected.add(5);
 
-        Iterators.rangeInt(10, 4).zip(expected).each(this.<Integer>getAssertEquals());
+        int count = Iterators.rangeInt(10, 4).zip(expected).reduce(0, this.<Integer>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
     public void testRangeLong2() throws Exception {
+        List<Long> expected = new ArrayList<Long>();
+        expected.add(10L);
+        expected.add(9L);
+        expected.add(8L);
+        expected.add(7L);
+        expected.add(6L);
+        expected.add(5L);
 
+        int count = Iterators.rangeLong(10L, 4L).zip(expected).reduce(0, this.<Long>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
     public void testRangeDouble2() throws Exception {
+        List<Double> expected = new ArrayList<Double>();
+        expected.add(10D);
+        expected.add(9D);
+        expected.add(8D);
+        expected.add(7D);
+        expected.add(6D);
+        expected.add(5D);
 
+        int count = Iterators.rangeDouble(10D, 4D).zip(expected).reduce(0, this.<Double>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
     public void testRangeFloat2() throws Exception {
+        List<Float> expected = new ArrayList<Float>();
+        expected.add(10F);
+        expected.add(9F);
+        expected.add(8F);
+        expected.add(7F);
+        expected.add(6F);
+        expected.add(5F);
 
+        int count = Iterators.rangeFloat(10F, 4F).zip(expected).reduce(0, this.<Float>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
@@ -62,21 +102,53 @@ public class IteratorsTest {
         expected.add(25);
         expected.add(29);
 
-        Iterators.rangeInt(5, 30, 4).zip(expected).each(this.<Integer>getAssertEquals());
+        int count = Iterators.rangeInt(5, 30, 4).zip(expected).reduce(0, this.<Integer>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
     public void testRangeLong() throws Exception {
+        List<Long> expected = new ArrayList<Long>();
+        expected.add(5L);
+        expected.add(9L);
+        expected.add(13L);
+        expected.add(17L);
+        expected.add(21L);
+        expected.add(25L);
+        expected.add(29L);
+
+        int count = Iterators.rangeLong(5L, 30L, 4L).zip(expected).reduce(0, this.<Long>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
 
     }
 
     @Test
     public void testRangeDouble() throws Exception {
+        List<Double> expected = new ArrayList<Double>();
+        expected.add(5D);
+        expected.add(9D);
+        expected.add(13D);
+        expected.add(17D);
+        expected.add(21D);
+        expected.add(25D);
+        expected.add(29D);
 
+        int count = Iterators.rangeDouble(5D, 30D, 4D).zip(expected).reduce(0, this.<Double>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
     public void testRangeFloat() throws Exception {
+        List<Float> expected = new ArrayList<Float>();
+        expected.add(5F);
+        expected.add(9F);
+        expected.add(13F);
+        expected.add(17F);
+        expected.add(21F);
+        expected.add(25F);
+        expected.add(29F);
 
+        int count = Iterators.rangeFloat(5F, 30F, 4F).zip(expected).reduce(0, this.<Float>getAssertEqualsAndCount());
+        Assert.assertEquals(expected.size(), count);
     }
 }

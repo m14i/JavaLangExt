@@ -16,7 +16,7 @@ import static org.m14i.ext.Ext.ext;
 
 public class ExtIterableTest {
     @Test
-    public void testAll() throws Exception {
+    public void testAllTrue() throws Exception {
         Collection<String> strings = new LinkedList<String>();
         strings.add("a");
         strings.add("a");
@@ -35,7 +35,26 @@ public class ExtIterableTest {
     }
 
     @Test
-    public void testAny() throws Exception {
+    public void testAllFalse() throws Exception {
+        Collection<String> strings = new LinkedList<String>();
+        strings.add("a");
+        strings.add("a");
+        strings.add("b");
+
+        boolean expected = false;
+
+        boolean actual = ext(strings).all(new Func1<String, Boolean>() {
+            @Override
+            public Boolean apply(String arg) {
+                return arg.equals("a");
+            }
+        });
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testAnyTrue() throws Exception {
         Collection<String> strings = new LinkedList<String>();
         strings.add("a");
         strings.add("a");
@@ -43,6 +62,26 @@ public class ExtIterableTest {
         strings.add("b");
 
         boolean expected = true;
+
+        boolean actual = ext(strings).any(new Func1<String, Boolean>() {
+            @Override
+            public Boolean apply(String arg) {
+                return arg.equals("b");
+            }
+        });
+
+        Assert.assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testAnyFalse() throws Exception {
+        Collection<String> strings = new LinkedList<String>();
+        strings.add("a");
+        strings.add("a");
+        strings.add("a");
+        strings.add("a");
+
+        boolean expected = false;
 
         boolean actual = ext(strings).any(new Func1<String, Boolean>() {
             @Override
@@ -137,7 +176,7 @@ public class ExtIterableTest {
                         new Func1<String, String>() {
                             @Override
                             public String apply(String arg) {
-                                return arg.toUpperCase();  
+                                return arg.toUpperCase();
                             }
                         }
                 )
