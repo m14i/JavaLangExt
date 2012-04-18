@@ -1,7 +1,5 @@
 package org.m14i.ext.tuples;
 
-import org.m14i.ext.tuples.Tuple2;
-
 public class Tuple3<A, B, C> extends Tuple2<A, B> {
     private C item3;
 
@@ -10,7 +8,7 @@ public class Tuple3<A, B, C> extends Tuple2<A, B> {
         this.item3 = item3;
     }
 
-    public C getItem3() {
+    public C get3() {
         return item3;
     }
 

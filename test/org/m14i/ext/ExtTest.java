@@ -81,7 +81,7 @@ public class ExtTest {
         
 
 
-        ext(out.toByteArray()).each(new Proc1<Byte>() {
+        from(out.toByteArray()).each(new Proc1<Byte>() {
             @Override
             public void apply(Byte arg) {
                 System.out.println(arg.byteValue());

@@ -13,68 +13,67 @@ import java.util.LinkedList;
 
 public class Ext {
     
-    public static <T> ExtIterable<T> ext(Iterable<T> iterable) {
+    public static <T> ExtIterable<T> from(Iterable<T> iterable) {
         return new ExtIterableImpl<T>(iterable);
     }
 
-    public static <T> ExtIterable<T> ext(T... items) {
-        return new ExtIterableImpl<T>(Arrays.asList(items));
+    public static <T> ExtIterable<T> from(T... xs) {
+        return new ExtIterableImpl<T>(Arrays.asList(xs));
     }
 
-    public static ExtIterable<Byte> ext(byte[] items) {
+    public static ExtIterable<Byte> from(byte[] xs) {
         Collection<Byte> bytes = new LinkedList<Byte>();
-        for (byte item : items) {
-            bytes.add(item);
-        }
-        return ext(bytes);
+        for (byte x : xs)
+            bytes.add(x);
+
+        return from(bytes);
     }
 
-    public static ExtIterable<Character> ext(char[] items) {
+    public static ExtIterable<Character> from(char[] xs) {
         Collection<Character> chars = new LinkedList<Character>();
-        for (char item : items) {
-            chars.add(item);
-        }
-        return ext(chars);
+        for (char x : xs)
+            chars.add(x);
+
+        return from(chars);
     }
 
-    public static ExtIterable<Integer> ext(int[] items) {
+    public static ExtIterable<Integer> from(int[] xs) {
         Collection<Integer> ints = new LinkedList<Integer>();
-        for (int item : items) {
-            ints.add(item);
-        }
-        return ext(ints);
+        for (int x : xs)
+            ints.add(x);
+
+        return from(ints);
     }
 
-    public static ExtIterable<Long> ext(long[] items) {
+    public static ExtIterable<Long> from(long[] xs) {
         Collection<Long> longs = new LinkedList<Long>();
-        for (long item : items) {
-            longs.add(item);
-        }
-        return ext(longs);
+        for (long x : xs)
+            longs.add(x);
+
+        return from(longs);
     }
 
-    public static ExtIterable<Float> ext(float[] items) {
+    public static ExtIterable<Float> from(float[] xs) {
         Collection<Float> floats = new LinkedList<Float>();
-        for (float item : items) {
-            floats.add(item);
-        }
-        return ext(floats);
+        for (float x : xs)
+            floats.add(x);
+
+        return from(floats);
     }
 
-    public static ExtIterable<Double> ext(double[] items) {
+    public static ExtIterable<Double> from(double[] xs) {
         Collection<Double> doubles = new LinkedList<Double>();
-        for (double item : items) {
-            doubles.add(item);
-        }
-        return ext(doubles);
+        for (double x : xs)
+            doubles.add(x);
+
+        return from(doubles);
     }
 
-    public static <T> T coalesce(T... items) {
-        for (T item : items) {
-            if (item != null) {
-                return item;
-            }
-        }
+    public static <T> T coalesce(T... xs) {
+        for (T x : xs)
+            if (x != null)
+                return x;
+
         return null;
     }
 
@@ -118,12 +117,12 @@ public class Ext {
         return result;
     }
 
-    public static <Z, T extends Closeable> Z tryWith(T object, Func1<T, Z> func) throws IOException {
+    public static <Z, T extends Closeable> Z tryWith(T x, Func1<T, Z> func) throws IOException {
         Z result = null;
         try {
-            result = func.apply(object);
+            result = func.apply(x);
         } finally {
-            object.close();
+            x.close();
         }
         return result;
     }

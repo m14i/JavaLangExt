@@ -6,14 +6,14 @@ import org.m14i.ext.iterator.ImmutableIterator;
 
 public class Iterators {
 
-    public static <T> ExtIterable<T> repeat(final T item, final long repeat) {
+    public static <T> ExtIterable<T> repeat(final T item, final long repetitions) {
         return new ExtIterableImpl<T>(new ImmutableIterator<T>() {
 
             long counter = 0;
 
             @Override
             public boolean hasNext() {
-                return counter < repeat;
+                return counter < repetitions;
             }
 
             @Override
@@ -22,6 +22,10 @@ public class Iterators {
                 return item;
             }
         });
+    }
+
+    public static ExtIterableImpl<Integer> rangeInt(final Integer end) {
+        return rangeInt(0, end, 1);
     }
 
     public static ExtIterableImpl<Integer> rangeInt(final Integer start, final Integer end) {

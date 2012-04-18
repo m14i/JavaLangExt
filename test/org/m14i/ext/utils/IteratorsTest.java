@@ -2,35 +2,50 @@ package org.m14i.ext.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.m14i.ext.iterator.ExtIterable;
 import org.m14i.ext.methods.Func2;
-import org.m14i.ext.methods.Proc1;
 import org.m14i.ext.tuples.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 
 public class IteratorsTest {
 
-    private <T> Proc1<Tuple2<T, T>> getAssertEquals() {
-        return new Proc1<Tuple2<T, T>>() {
+    private <T> Func2<Integer, Tuple2<T, T>, Integer> assertEqualsAndGetCount() {
+        return new Func2<Integer, Tuple2<T, T>, Integer>() {
             @Override
-            public void apply(Tuple2<T, T> arg) {
+            public Integer apply(Integer acc, Tuple2<T, T> arg) {
                 System.out.println(arg);
-                Assert.assertEquals(arg.getItem1(), arg.getItem2());
+                Assert.assertEquals(arg.get1(), arg.get2());
+                return acc + 1;
             }
         };
     }
 
-    private <T> Func2<Integer, Tuple2<T, T>, Integer> getAssertEqualsAndCount() {
-        return new Func2<Integer, Tuple2<T, T>, Integer>() {
-            @Override
-            public Integer apply(Integer carry, Tuple2<T, T> arg) {
-                System.out.println(arg);
-                Assert.assertEquals(arg.getItem1(), arg.getItem2());
-                return carry + 1;
-            }
-        };
+    @Test
+    public void testRepeat() throws Exception {
+        List<String> hellos = Iterators.repeat("hello", 5).as(new ArrayList<String>());
+
+        assertEquals(5, hellos.size());
+    }
+
+    @Test
+    public void testRangeInt1() throws Exception {
+
+        List<Integer> expected = new ArrayList<Integer>();
+        expected.add(0);
+        expected.add(1);
+        expected.add(2);
+        expected.add(3);
+        expected.add(4);
+        expected.add(5);
+
+        int count = Iterators.rangeInt(6).zip(expected).reduce(0, this.<Integer>assertEqualsAndGetCount());
+        Assert.assertEquals(expected.size(), count);
     }
 
     @Test
@@ -44,7 +59,7 @@ public class IteratorsTest {
         expected.add(6);
         expected.add(5);
 
-        int count = Iterators.rangeInt(10, 4).zip(expected).reduce(0, this.<Integer>getAssertEqualsAndCount());
+        int count = Iterators.rangeInt(10, 4).zip(expected).reduce(0, this.<Integer>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -58,7 +73,7 @@ public class IteratorsTest {
         expected.add(6L);
         expected.add(5L);
 
-        int count = Iterators.rangeLong(10L, 4L).zip(expected).reduce(0, this.<Long>getAssertEqualsAndCount());
+        int count = Iterators.rangeLong(10L, 4L).zip(expected).reduce(0, this.<Long>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -72,7 +87,7 @@ public class IteratorsTest {
         expected.add(6D);
         expected.add(5D);
 
-        int count = Iterators.rangeDouble(10D, 4D).zip(expected).reduce(0, this.<Double>getAssertEqualsAndCount());
+        int count = Iterators.rangeDouble(10D, 4D).zip(expected).reduce(0, this.<Double>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -86,7 +101,7 @@ public class IteratorsTest {
         expected.add(6F);
         expected.add(5F);
 
-        int count = Iterators.rangeFloat(10F, 4F).zip(expected).reduce(0, this.<Float>getAssertEqualsAndCount());
+        int count = Iterators.rangeFloat(10F, 4F).zip(expected).reduce(0, this.<Float>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -102,7 +117,7 @@ public class IteratorsTest {
         expected.add(25);
         expected.add(29);
 
-        int count = Iterators.rangeInt(5, 30, 4).zip(expected).reduce(0, this.<Integer>getAssertEqualsAndCount());
+        int count = Iterators.rangeInt(5, 30, 4).zip(expected).reduce(0, this.<Integer>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -117,7 +132,7 @@ public class IteratorsTest {
         expected.add(25L);
         expected.add(29L);
 
-        int count = Iterators.rangeLong(5L, 30L, 4L).zip(expected).reduce(0, this.<Long>getAssertEqualsAndCount());
+        int count = Iterators.rangeLong(5L, 30L, 4L).zip(expected).reduce(0, this.<Long>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
 
     }
@@ -133,7 +148,7 @@ public class IteratorsTest {
         expected.add(25D);
         expected.add(29D);
 
-        int count = Iterators.rangeDouble(5D, 30D, 4D).zip(expected).reduce(0, this.<Double>getAssertEqualsAndCount());
+        int count = Iterators.rangeDouble(5D, 30D, 4D).zip(expected).reduce(0, this.<Double>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 
@@ -148,7 +163,7 @@ public class IteratorsTest {
         expected.add(25F);
         expected.add(29F);
 
-        int count = Iterators.rangeFloat(5F, 30F, 4F).zip(expected).reduce(0, this.<Float>getAssertEqualsAndCount());
+        int count = Iterators.rangeFloat(5F, 30F, 4F).zip(expected).reduce(0, this.<Float>assertEqualsAndGetCount());
         Assert.assertEquals(expected.size(), count);
     }
 }

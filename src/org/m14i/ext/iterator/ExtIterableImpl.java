@@ -2,12 +2,12 @@ package org.m14i.ext.iterator;
 
 import org.m14i.ext.methods.Func1;
 import org.m14i.ext.methods.Func2;
+import org.m14i.ext.methods.Pred1;
 import org.m14i.ext.methods.Proc1;
 import org.m14i.ext.tuples.Tuple2;
 import org.m14i.ext.tuples.Tuple3;
 import org.m14i.ext.tuples.Tuple4;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class ExtIterableImpl<T> implements ExtIterable<T> {
@@ -22,81 +22,93 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
     }
 
     @Override
-    public boolean all(final Func1<T, Boolean> predicate) {
-        Func1<T, Boolean> func = new Func1<T, Boolean>() {
+    public boolean all(final Pred1<T> predicate) {
+        Pred1<T> wrapper = new Pred1<T>() {
             @Override
-            public Boolean apply(T arg) {
-                return !predicate.apply(arg);
+            public Boolean apply(T x) {
+                return !predicate.apply(x);
             }
         };
-        return !any(func);
+
+        return !any(wrapper);
     }
 
     @Override
-    public boolean any(final Func1<T, Boolean> predicate) {
-        while (iterator.hasNext()) {
-            if (predicate.apply(iterator.next())) {
+    public boolean any(final Pred1<T> predicate) {
+        while (iterator.hasNext())
+            if (predicate.apply(iterator.next()))
                 return true;
-            }
-        }
+
         return false;
     }
 
     @Override
-    public long count(final Func1<T, Boolean> predicate) {
+    public long count(final Pred1<T> predicate) {
         return reduce(0L, new Func2<Long, T, Long>() {
             @Override
-            public Long apply(Long carry, T item) {
-                return carry + (predicate.apply(item) ? 1L : 0L);
+            public Long apply(Long acc, T x) {
+                return acc + (predicate.apply(x) ? 1L : 0L);
             }
         });
     }
 
     @Override
+    public T head() {
+        if (iterator.hasNext())
+            return iterator.next();
+
+        return null;
+    }
+
+    @Override
+    public T first(final Pred1<T> predicate) {
+        return filter(predicate).head();
+    }
+
+    @Override
     public <Z> Z reduce(final Z initial, final Func2<Z, T, Z> reduce) {
-        Z carry = initial;
-        while (iterator.hasNext()) {
-            carry = reduce.apply(carry, iterator.next());
-        }
-        return carry;
+        Z acc = initial;
+        while (iterator.hasNext())
+            acc = reduce.apply(acc, iterator.next());
+
+        return acc;
     }
 
     @Override
     public ExtIterable<T> drop(final long num) {
-        return filter(new Func1<T, Boolean>() {
+        return filter(new Pred1<T>() {
             long count = 0;
 
             @Override
-            public Boolean apply(T arg) {
+            public Boolean apply(T _) {
                 return count++ >= num;
             }
         });
     }
 
     @Override
-    public ExtIterable<T> filter(final Func1<T, Boolean> predicate) {
+    public ExtIterable<T> filter(final Pred1<T> predicate) {
         return new ExtIterableImpl<T>(new ImmutableIterator<T>() {
-            T nextItem = findNextItem();
+            T xn = findNext();
 
-            T findNextItem() {
+            T findNext() {
                 while (iterator.hasNext()) {
-                    T item = iterator.next();
-                    if (predicate.apply(item)) {
-                        return item;
-                    }
+                    T x = iterator.next();
+                    if (predicate.apply(x))
+                        return x;
                 }
                 return null;
             }
 
             @Override
             public boolean hasNext() {
-                return nextItem != null;
+                return xn != null;
             }
 
             @Override
             public T next() {
-                T current = nextItem;
-                nextItem = findNextItem();
+                T current = xn;
+                xn = findNext();
                 return current;
             }
         });
@@ -104,9 +116,8 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
     @Override
     public void each(final Proc1<T> proc) {
-        while (iterator.hasNext()) {
+        while (iterator.hasNext())
             proc.apply(iterator.next());
-        }
     }
 
     @Override
@@ -139,8 +150,8 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
             @Override
             public Tuple2<A, B> next() {
-                T item = iterator.next();
-                return new Tuple2<A, B>(a.apply(item), b.apply(item));
+                T x = iterator.next();
+                return new Tuple2<A, B>(a.apply(x), b.apply(x));
             }
         });
     }
@@ -155,8 +166,8 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
             @Override
             public Tuple3<A, B, C> next() {
-                T item = iterator.next();
-                return new Tuple3<A, B, C>(a.apply(item), b.apply(item), c.apply(item));
+                T x = iterator.next();
+                return new Tuple3<A, B, C>(a.apply(x), b.apply(x), c.apply(x));
             }
         });
     }
@@ -171,18 +182,21 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
             @Override
             public Tuple4<A, B, C, D> next() {
-                T item = iterator.next();
-                return new Tuple4<A, B, C, D>(a.apply(item), b.apply(item), c.apply(item), d.apply(item));
+                T x = iterator.next();
+                return new Tuple4<A, B, C, D>(a.apply(x), b.apply(x), c.apply(x), d.apply(x));
             }
         });
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public ExtIterable<T> sort() {
         List list = as(new ArrayList());
         Collections.sort(list);
         return new ExtIterableImpl<T>(list);
     }
 
+    @Override
     public ExtIterable<T> sort(final Comparator<T> comparator) {
         List<T> list = as(new ArrayList<T>());
         Collections.sort(list, comparator);
@@ -191,9 +205,9 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
     @Override
     public <X extends Collection<T>> X as(X container) {
-        while (iterator.hasNext()) {
+        while (iterator.hasNext())
             container.add(iterator.next());
-        }
+
         return container;
     }
 
@@ -242,25 +256,24 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
 
             @Override
             public T next() {
-                T item;
+                T x;
                 if (iterator.hasNext()) {
-                    item = iterator.next();
-                    if (!isLoaded) {
-                        collection.add(item);
-                    }
+                    x = iterator.next();
+                    if (!isLoaded)
+                        collection.add(x);
                 } else {
                     isLoaded = true;
                     iterator = collection.iterator();
-                    item = iterator.next();
+                    x = iterator.next();
                 }
-                return item;
+                return x;
             }
         });
     }
 
     @Override
-    public <S> ExtIterable<Tuple2<T, S>> zip(final Iterable<S> items) {
-        final Iterator<S> it = items.iterator();
+    public <S> ExtIterable<Tuple2<T, S>> zip(final Iterable<S> xs) {
+        final Iterator<S> it = xs.iterator();
         return new ExtIterableImpl<Tuple2<T, S>>(new ImmutableIterator<Tuple2<T, S>>() {
             @Override
             public boolean hasNext() {
