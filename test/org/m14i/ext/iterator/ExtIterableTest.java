@@ -13,8 +13,7 @@ import org.m14i.ext.utils.Iterators;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.m14i.ext.Ext.from;
 
 public class ExtIterableTest {
@@ -148,9 +147,8 @@ public class ExtIterableTest {
             }
         }).into(new ArrayList<String>());
 
-        for (String item : actual) {
-            Assert.assertTrue(!item.equals("b"));
-        }
+        for (String x : actual)
+            Assert.assertTrue(!x.equals("b"));
     }
 
     @Test
@@ -169,7 +167,7 @@ public class ExtIterableTest {
         expected.add(new Tuple2<Integer, String>(97, "A"));
         expected.add(new Tuple2<Integer, String>(97, "A"));
 
-        Ext.from(strings)
+        from(strings)
                 .map(new Func1<String, Integer>() {
                          @Override
                          public Integer apply(String arg) {
@@ -205,10 +203,10 @@ public class ExtIterableTest {
 
         String expected = "/a/b/c/";
 
-        String actual = Ext.from(strings).reduce("/", new Func2<String, String, String>() {
+        String actual = from(strings).reduce("/", new Func2<String, String, String>() {
             @Override
-            public String apply(String carry, String item) {
-                return carry + item + "/";
+            public String apply(String acc, String x) {
+                return acc + x + "/";
             }
         });
 
@@ -317,17 +315,46 @@ public class ExtIterableTest {
     }
 
     @Test
-    public void testHeadWithEmptyList() {
+    public void testHeadWithEmptyList() throws Exception {
         Object head = from(new ArrayList()).head();
 
         assertNull(head);
     }
 
     @Test
-    public void testHead() {
+    public void testHead() throws Exception {
         int head = from(1, 2, 3).head();
 
         assertEquals(1, head);
+    }
+
+    @Test
+    public void testFirstWithEmptyList() throws Exception {
+        Object first = from(new ArrayList()).first(new Pred1() {
+            @Override
+            public Boolean apply(Object arg) {
+                return true;
+            }
+        });
+
+        assertNull(first);
+    }
+
+    @Test
+    public void testFirst() throws Exception {
+        Tuple2<Integer, String> first = from(
+                new Tuple2<Integer, String>(1, "a"),
+                new Tuple2<Integer, String>(2, "b"),
+                new Tuple2<Integer, String>(3, "c"),
+                new Tuple2<Integer, String>(4, "b"))
+                .first(new Pred1<Tuple2<Integer, String>>() {
+                    @Override
+                    public Boolean apply(Tuple2<Integer, String> arg) {
+                        return arg.get2().equals("b");
+                    }
+                });
+
+        assertTrue(2 == first.get1());
     }
 
 }
