@@ -27,14 +27,14 @@ A collection of tools for Java inspired by features found in other languages.
 		repeat(object, repetitions)
 
 - chained operations on Iterable<T> types:
-	Example in Java: ext(lotsOfObjects).map(...).filter(...).reduce(...) etc...
+	Example in Java: from(lotsOfObjects).map(...).filter(...).reduce(...) etc...
 	
 	map can take multiple Func1s:
 	in Clojure	> (map list f1 f2)
-	in JLE		> ext(someObjects).map(f1, f2)
+	in JLE		> from(someObjects).map(f1, f2)
 
 	zip can take multiple Iterables:
-	in JLE		> ext(someObjects).zip(moreObjects, evenMoreObjects)
+	in JLE		> from(someObjects).zip(moreObjects, evenMoreObjects)
 
 
 
