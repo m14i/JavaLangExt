@@ -2,7 +2,6 @@ package org.m14i.ext.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.m14i.ext.iterator.ExtIterable;
 import org.m14i.ext.methods.Func2;
 import org.m14i.ext.tuples.Tuple2;
 
@@ -28,7 +27,7 @@ public class IteratorsTest {
 
     @Test
     public void testRepeat() throws Exception {
-        List<String> hellos = Iterators.repeat("hello", 5).as(new ArrayList<String>());
+        List<String> hellos = Iterators.repeat("hello", 5).into(new ArrayList<String>());
 
         assertEquals(5, hellos.size());
     }

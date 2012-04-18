@@ -191,20 +191,20 @@ public class ExtIterableImpl<T> implements ExtIterable<T> {
     @Override
     @SuppressWarnings("unchecked")
     public ExtIterable<T> sort() {
-        List list = as(new ArrayList());
+        List list = into(new ArrayList());
         Collections.sort(list);
         return new ExtIterableImpl<T>(list);
     }
 
     @Override
     public ExtIterable<T> sort(final Comparator<T> comparator) {
-        List<T> list = as(new ArrayList<T>());
+        List<T> list = into(new ArrayList<T>());
         Collections.sort(list, comparator);
         return new ExtIterableImpl<T>(list);
     }
 
     @Override
-    public <X extends Collection<T>> X as(X container) {
+    public <X extends Collection<T>> X into(X container) {
         while (iterator.hasNext())
             container.add(iterator.next());
 

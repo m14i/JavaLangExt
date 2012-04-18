@@ -25,7 +25,7 @@ public interface ExtIterable<T> extends Iterable<T> {
     /**
      * Injects the items into the container instance and returns the container
      */
-    <X extends Collection<T>> X as(X container);
+    <X extends Collection<T>> X into(X container);
 
     /**
      * Returns the number of items that satisfy the predicate

@@ -146,7 +146,7 @@ public class ExtIterableTest {
             public Boolean apply(String arg) {
                 return arg.equals("a");
             }
-        }).as(new ArrayList<String>());
+        }).into(new ArrayList<String>());
 
         for (String item : actual) {
             Assert.assertTrue(!item.equals("b"));
@@ -274,7 +274,7 @@ public class ExtIterableTest {
         expected.add(new Tuple2<Integer, String>(4, "d"));
         expected.add(new Tuple2<Integer, String>(5, "e"));
 
-        List<Tuple2<Integer, String>> actual = Ext.from(ints).zip(strings).as(new ArrayList<Tuple2<Integer, String>>());
+        List<Tuple2<Integer, String>> actual = Ext.from(ints).zip(strings).into(new ArrayList<Tuple2<Integer, String>>());
 
         for (int i = 0; i < expected.size(); i++) {
             System.out.println(actual.get(i));
