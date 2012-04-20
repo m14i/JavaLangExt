@@ -1,7 +1,7 @@
 package org.m14i.ext;
 
-import org.m14i.ext.methods.Func1;
-import org.m14i.ext.methods.Proc1;
+import org.m14i.ext.methods.Fn1;
+import org.m14i.ext.methods.Proc;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -68,7 +68,7 @@ public class ExtTest {
 
     @Test
     public void testTryWith() throws Exception {
-        ByteArrayOutputStream out = tryWith(new ByteArrayOutputStream(), new Func1<ByteArrayOutputStream, ByteArrayOutputStream>() {
+        ByteArrayOutputStream out = tryWith(new ByteArrayOutputStream(), new Fn1<ByteArrayOutputStream, ByteArrayOutputStream>() {
             @Override
             public ByteArrayOutputStream apply(ByteArrayOutputStream out) {
                 out.write(1);
@@ -81,7 +81,7 @@ public class ExtTest {
         
 
 
-        from(out.toByteArray()).each(new Proc1<Byte>() {
+        from(out.toByteArray()).each(new Proc<Byte>() {
             @Override
             public void apply(Byte arg) {
                 System.out.println(arg.byteValue());

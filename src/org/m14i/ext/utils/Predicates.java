@@ -1,11 +1,11 @@
 package org.m14i.ext.utils;
 
-import org.m14i.ext.methods.Pred1;
+import org.m14i.ext.methods.Pred;
 
 public class Predicates {
 
-    public static Pred1 isNull() {
-        return new Pred1() {
+    public static Pred isNull() {
+        return new Pred() {
             @Override
             public Boolean apply(Object x) {
                 return null == x;
@@ -13,8 +13,8 @@ public class Predicates {
         };
     }
 
-    public static Pred1 isNotNull() {
-        return new Pred1() {
+    public static Pred isNotNull() {
+        return new Pred() {
             @Override
             public Boolean apply(Object x) {
                 return null != x;

@@ -14,6 +14,6 @@ public class Tuple3<A, B, C> extends Tuple2<A, B> {
 
     @Override
     public String toString() {
-        return super.toString() + ":" + item3;
+        return "(" + get1() + "," + get2() + "," + item3 + ")";
     }
 }

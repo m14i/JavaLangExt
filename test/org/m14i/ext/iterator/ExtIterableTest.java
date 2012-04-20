@@ -1,12 +1,11 @@
 package org.m14i.ext.iterator;
 
-import junit.framework.Assert;
 import org.junit.Test;
 import org.m14i.ext.Ext;
-import org.m14i.ext.methods.Func1;
-import org.m14i.ext.methods.Func2;
-import org.m14i.ext.methods.Pred1;
-import org.m14i.ext.methods.Proc1;
+import org.m14i.ext.methods.Fn1;
+import org.m14i.ext.methods.Fn2;
+import org.m14i.ext.methods.Pred;
+import org.m14i.ext.methods.Proc;
 import org.m14i.ext.tuples.Tuple2;
 import org.m14i.ext.utils.Functions;
 import org.m14i.ext.utils.Iterators;
@@ -26,14 +25,14 @@ public class ExtIterableTest {
 
         boolean expected = true;
 
-        boolean actual = Ext.from(strings).all(new Pred1<String>() {
+        boolean actual = Ext.from(strings).all(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("a");
             }
         });
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -45,14 +44,14 @@ public class ExtIterableTest {
 
         boolean expected = false;
 
-        boolean actual = Ext.from(strings).all(new Pred1<String>() {
+        boolean actual = Ext.from(strings).all(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("a");
             }
         });
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -65,14 +64,14 @@ public class ExtIterableTest {
 
         boolean expected = true;
 
-        boolean actual = Ext.from(strings).any(new Pred1<String>() {
+        boolean actual = Ext.from(strings).any(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("b");
             }
         });
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -85,14 +84,14 @@ public class ExtIterableTest {
 
         boolean expected = false;
 
-        boolean actual = Ext.from(strings).any(new Pred1<String>() {
+        boolean actual = Ext.from(strings).any(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("b");
             }
         });
 
-        Assert.assertEquals(actual, expected);
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -107,26 +106,26 @@ public class ExtIterableTest {
 
         long expected = 4;
 
-        long actual = Ext.from(strings).count(new Pred1<String>() {
+        long actual = Ext.from(strings).count(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("a");
             }
         });
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testDrop() throws Exception {
         final Integer expected[] = {95, 96, 97, 98, 99};
 
-        Iterators.rangeInt(0, 100).drop(95).each(new Proc1<Integer>() {
+        Iterators.range(0, 100).drop(95).each(new Proc<Integer>() {
             int count = 0;
 
             @Override
             public void apply(Integer arg) {
-                Assert.assertEquals(expected[count++], arg);
+                assertEquals(expected[count++], arg);
             }
         });
     }
@@ -140,7 +139,7 @@ public class ExtIterableTest {
         strings.add("a");
         strings.add("a");
 
-        List<String> actual = Ext.from(strings).filter(new Pred1<String>() {
+        List<String> actual = Ext.from(strings).filter(new Pred<String>() {
             @Override
             public Boolean apply(String arg) {
                 return arg.equals("a");
@@ -148,7 +147,7 @@ public class ExtIterableTest {
         }).into(new ArrayList<String>());
 
         for (String x : actual)
-            Assert.assertTrue(!x.equals("b"));
+            assertTrue(!x.equals("b"));
     }
 
     @Test
@@ -168,27 +167,27 @@ public class ExtIterableTest {
         expected.add(new Tuple2<Integer, String>(97, "A"));
 
         from(strings)
-                .map(new Func1<String, Integer>() {
+                .map(new Fn1<String, Integer>() {
                          @Override
                          public Integer apply(String arg) {
                              return arg.hashCode();
                          }
                      },
-                        new Func1<String, String>() {
+                        new Fn1<String, String>() {
                             @Override
                             public String apply(String arg) {
                                 return arg.toUpperCase();
                             }
                         }
                 )
-                .each(new Proc1<Tuple2<Integer, String>>() {
+                .each(new Proc<Tuple2<Integer, String>>() {
 
                     int counter = 0;
 
                     @Override
                     public void apply(Tuple2<Integer, String> arg) {
-                        Assert.assertEquals(expected.get(counter).get1(), arg.get1());
-                        Assert.assertEquals(expected.get(counter).get2(), arg.get2());
+                        assertEquals(expected.get(counter).get1(), arg.get1());
+                        assertEquals(expected.get(counter).get2(), arg.get2());
                         counter++;
                     }
                 });
@@ -203,7 +202,7 @@ public class ExtIterableTest {
 
         String expected = "/a/b/c/";
 
-        String actual = from(strings).reduce("/", new Func2<String, String, String>() {
+        String actual = from(strings).reduce("/", new Fn2<String, String, String>() {
             @Override
             public String apply(String acc, String x) {
                 return acc + x + "/";
@@ -212,13 +211,13 @@ public class ExtIterableTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testStuff() throws Exception {
         // What is the sum of the square roots of numbers 30-100?
-        Double sum = Iterators.rangeInt(30, 100).map(new Func1<Integer, Double>() {
+        Double sum = Iterators.range(30, 100).map(new Fn1<Integer, Double>() {
             @Override
             public Double apply(Integer arg) {
                 return Math.sqrt(arg);
@@ -231,12 +230,12 @@ public class ExtIterableTest {
     public void testTake() throws Exception {
         final Integer expected[] = {30, 31, 32};
 
-        Iterators.rangeInt(30, 100).take(3).each(new Proc1<Integer>() {
+        Iterators.range(30, 100).take(3).each(new Proc<Integer>() {
             int count = 0;
 
             @Override
             public void apply(Integer arg) {
-                Assert.assertEquals(expected[count++], arg);
+                assertEquals(expected[count++], arg);
             }
         });
     }
@@ -244,9 +243,9 @@ public class ExtIterableTest {
     @Test
     public void testToStrings() throws Exception {
         String expected = "42, 43, 44, 45, 46, 47, 48, 49";
-        String actual = Iterators.rangeInt(42, 50).toStrings().reduce("", Functions.join(", "));
+        String actual = Iterators.range(42, 50).join(", ");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -277,8 +276,8 @@ public class ExtIterableTest {
         for (int i = 0; i < expected.size(); i++) {
             System.out.println(actual.get(i));
 
-            Assert.assertEquals(expected.get(i).get1(), actual.get(i).get1());
-            Assert.assertEquals(expected.get(i).get2(), actual.get(i).get2());
+            assertEquals(expected.get(i).get1(), actual.get(i).get1());
+            assertEquals(expected.get(i).get2(), actual.get(i).get2());
         }
     }
 
@@ -286,18 +285,18 @@ public class ExtIterableTest {
     public void testWrap() throws Exception {
 
         String expected = "a/b/c/a/b/c/a/b/c/a";
-        String actual = Ext.from("a", "b", "c").wrap().take(10).reduce("", Functions.join("/"));
+        String actual = Ext.from("a", "b", "c").wrap().take(10).join("/");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testSort() throws Exception {
 
         String expected = "1,2,3,4,5";
-        String actual = Ext.from(3, 2, 1, 5, 4).sort().toStrings().reduce("", Functions.join(","));
+        String actual = Ext.from(3, 2, 1, 5, 4).sort().join(",");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -309,11 +308,12 @@ public class ExtIterableTest {
             public int compare(Integer a, Integer b) {
                 return -a.compareTo(b);
             }
-        }).toStrings().reduce("", Functions.join(","));
+        }).join(",");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testHeadWithEmptyList() throws Exception {
         Object head = from(new ArrayList()).head();
@@ -329,8 +329,20 @@ public class ExtIterableTest {
     }
 
     @Test
+    public void testDistinct() throws Exception {
+        String result = from("a", "b", "c", "a", "b", "c", "a", "b", "c")
+                .distinct()
+                .join("");
+
+        assertEquals(3, result.length());
+        assertEquals("abc", result);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
     public void testFirstWithEmptyList() throws Exception {
-        Object first = from(new ArrayList()).first(new Pred1() {
+        Object first = from(new ArrayList()).first(new Pred() {
             @Override
             public Boolean apply(Object arg) {
                 return true;
@@ -340,6 +352,7 @@ public class ExtIterableTest {
         assertNull(first);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testFirst() throws Exception {
         Tuple2<Integer, String> first = from(
@@ -347,7 +360,7 @@ public class ExtIterableTest {
                 new Tuple2<Integer, String>(2, "b"),
                 new Tuple2<Integer, String>(3, "c"),
                 new Tuple2<Integer, String>(4, "b"))
-                .first(new Pred1<Tuple2<Integer, String>>() {
+                .first(new Pred<Tuple2<Integer, String>>() {
                     @Override
                     public Boolean apply(Tuple2<Integer, String> arg) {
                         return arg.get2().equals("b");

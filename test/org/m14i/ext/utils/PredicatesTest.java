@@ -19,7 +19,7 @@ public class PredicatesTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testIsNotNull() throws Exception {
-        String result = from("a", "b", null, "d").filter(isNotNull()).reduce("", Functions.join("/"));
+        String result = from("a", "b", null, "d").filter(isNotNull()).join("/");
 
         assertEquals("a/b/d", result);
     }

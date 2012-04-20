@@ -1,131 +1,398 @@
 package org.m14i.ext.iterator;
 
-import org.m14i.ext.methods.Func1;
-import org.m14i.ext.methods.Func2;
-import org.m14i.ext.methods.Pred1;
-import org.m14i.ext.methods.Proc1;
+import org.m14i.ext.methods.Fn1;
+import org.m14i.ext.methods.Fn2;
+import org.m14i.ext.methods.Pred;
+import org.m14i.ext.methods.Proc;
 import org.m14i.ext.tuples.Tuple2;
 import org.m14i.ext.tuples.Tuple3;
 import org.m14i.ext.tuples.Tuple4;
+import org.m14i.ext.utils.Functions;
 
-import java.util.Collection;
-import java.util.Comparator;
+import java.util.*;
 
-public interface ExtIterable<T> extends Iterable<T> {
+import static org.m14i.ext.Ext.from;
+
+public class ExtIterable<T> implements Iterable<T> {
+
+    private final Iterator<T> iterator;
+
+    public ExtIterable(Iterator<T> iterator) {
+        this.iterator = iterator;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return this.iterator;
+    }
+
     /**
      * Checks if all items satisfy the predicate
      */
-    boolean all(Pred1<T> predicate);
+    public boolean all(final Pred<T> predicate) {
+        Pred<T> wrapper = new Pred<T>() {
+            @Override
+            public Boolean apply(T x) {
+                return !predicate.apply(x);
+            }
+        };
+
+        return !any(wrapper);
+    }
 
     /**
      * Checks if any item satisfies the predicate
      */
-    boolean any(Pred1<T> predicate);
+    public boolean any(final Pred<T> predicate) {
+        while (iterator.hasNext())
+            if (predicate.apply(iterator.next()))
+                return true;
 
-    /**
-     * Injects the items into the container instance and returns the container
-     */
-    <X extends Collection<T>> X into(X container);
+        return false;
+    }
 
     /**
      * Returns the number of items that satisfy the predicate
      */
-    long count(Pred1<T> predicate);
+    public long count(final Pred<T> predicate) {
+        return reduce(0L, new Fn2<Long, T, Long>() {
+            @Override
+            public Long apply(Long acc, T x) {
+                return acc + (predicate.apply(x) ? 1L : 0L);
+            }
+        });
+    }
 
     /**
-     * Remove items from the front of the list
+     * Returns first item
      */
-    ExtIterable<T> drop(long num);
+    public T head() {
+        if (iterator.hasNext())
+            return iterator.next();
+
+        return null;
+    }
 
     /**
-     * Execute a procedure for each item
+     * Remove duplicates
      */
-    void each(Proc1<T> proc);
+    public ExtIterable<T> distinct() {
+        final Set<T> set = new HashSet<T>();
+        return filter(new Pred<T>() {
+            @Override
+            public Boolean apply(T x) {
+                if (set.contains(x))
+                    return false;
+
+                set.add(x);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Returns first item that satisfies predicate
+     */
+    public T first(final Pred<T> predicate) {
+        return filter(predicate).head();
+    }
+
+    /**
+     * Convert items to string and join using separator
+     */
+    public String join(String separator){
+        return toStrings().reduce("", Functions.join(separator));
+    }
+
+    /**
+     * Reduces the items to a single object.
+     */
+    public <Z> Z reduce(final Z init, final Fn2<Z, T, Z> reduce) {
+        Z acc = init;
+        while (iterator.hasNext())
+            acc = reduce.apply(acc, iterator.next());
+
+        return acc;
+    }
+
+    /**
+     * Drop n items from the front of the list
+     */
+    public ExtIterable<T> drop(final long n) {
+        return filter(new Pred<T>() {
+            long count = 0;
+
+            @Override
+            public Boolean apply(T _) {
+                return count++ >= n;
+            }
+        });
+    }
+
+    /**
+     * take n items from the front of the list
+     */
+    public ExtIterable<T> take(final long num) {
+        return from(new ImmutableIterator<T>() {
+            long count = 0;
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext() && count < num;
+            }
+
+            @Override
+            public T next() {
+                count++;
+                return iterator.next();
+            }
+        });
+    }
 
     /**
      * Remove items that do not satisfy the predicate
      */
-    ExtIterable<T> filter(Pred1<T> predicate);
+    public ExtIterable<T> filter(final Pred<T> predicate) {
+        return from(new ImmutableIterator<T>() {
+            T xn = findNext();
+
+            T findNext() {
+                while (iterator.hasNext()) {
+                    T x = iterator.next();
+                    if (predicate.apply(x))
+                        return x;
+                }
+                return null;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return xn != null;
+            }
+
+            @Override
+            public T next() {
+                T current = xn;
+                xn = findNext();
+                return current;
+            }
+        });
+    }
+
+    /**
+     * Execute a procedure for each item
+     */
+    public void each(final Proc<T> proc) {
+        while (iterator.hasNext())
+            proc.apply(iterator.next());
+    }
 
     /**
      * Map an item of a type to another type
      */
-    <Z> ExtIterable<Z> map(Func1<T, Z> map);
+    public <Z> ExtIterable<Z> map(final Fn1<T, Z> map) {
+        return from(new ImmutableIterator<Z>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public Z next() {
+                return map.apply(iterator.next());
+            }
+        });
+    }
 
     /**
-     * Do several mappings at the same time. The result is a tuple containing the results
-     * from each function used to map an item
+     * Map an item of a type to another type
      */
-    <A, B> ExtIterable<Tuple2<A, B>> map(Func1<T, A> a, Func1<T, B> b);
+    public <A, B> ExtIterable<Tuple2<A, B>> map(final Fn1<T, A> a, final Fn1<T, B> b) {
+        return from(new ImmutableIterator<Tuple2<A, B>>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public Tuple2<A, B> next() {
+                T x = iterator.next();
+                return new Tuple2<A, B>(a.apply(x), b.apply(x));
+            }
+        });
+    }
 
     /**
-     * Do several mappings at the same time. The result is a tuple containing the results
-     * from each function used to map an item
+     * Map an item of a type to another type
      */
-    <A, B, C> ExtIterable<Tuple3<A, B, C>> map(Func1<T, A> a, Func1<T, B> b, Func1<T, C> c);
+    public <A, B, C> ExtIterable<Tuple3<A, B, C>> map(final Fn1<T, A> a,
+                                                      final Fn1<T, B> b,
+                                                      final Fn1<T, C> c) {
+        return from(new ImmutableIterator<Tuple3<A, B, C>>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public Tuple3<A, B, C> next() {
+                T x = iterator.next();
+                return new Tuple3<A, B, C>(a.apply(x), b.apply(x), c.apply(x));
+            }
+        });
+    }
 
     /**
-     * Do several mappings at the same time. The result is a tuple containing the results
-     * from each function used to map an item
+     * Map an item of a type to another type
      */
-    <A, B, C, D> ExtIterable<Tuple4<A, B, C, D>> map(Func1<T, A> a, Func1<T, B> b, Func1<T, C> c, Func1<T, D> d);
+    public <A, B, C, D> ExtIterable<Tuple4<A, B, C, D>> map(final Fn1<T, A> a,
+                                                            final Fn1<T, B> b,
+                                                            final Fn1<T, C> c,
+                                                            final Fn1<T, D> d) {
+        return from(new ImmutableIterator<Tuple4<A, B, C, D>>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
 
-    /**
-     * Reduces the items to a single object.
-     * <p/>
-     * Example: finding the sum of all the items
-     */
-    <Z> Z reduce(Z initial, Func2<Z, T, Z> reduce);
+            @Override
+            public Tuple4<A, B, C, D> next() {
+                T x = iterator.next();
+                return new Tuple4<A, B, C, D>(a.apply(x), b.apply(x), c.apply(x), d.apply(x));
+            }
+        });
+    }
 
     /**
      * @return ExtIterable with sorted items
      */
-    ExtIterable<T> sort();
+    @SuppressWarnings("unchecked")
+    public ExtIterable<T> sort() {
+        List list = into(new ArrayList());
+        Collections.sort(list);
+        return from(list.iterator());
+    }
 
     /**
      * @return ExtIterable with sorted items
      */
-    ExtIterable<T> sort(final Comparator<T> comparator);
+    public ExtIterable<T> sort(final Comparator<T> comparator) {
+        List<T> list = into(new ArrayList<T>());
+        Collections.sort(list, comparator);
+        return from(list.iterator());
+    }
 
     /**
-     * Get the first num items and remove the rest
+     * Injects the items into the container instance and returns the container
      */
-    ExtIterable<T> take(long num);
+    public <X extends Collection<T>> X into(X container) {
+        while (iterator.hasNext())
+            container.add(iterator.next());
+
+        return container;
+    }
 
     /**
      * Call toString() on all items in the collection
      */
-    ExtIterable<String> toStrings();
+    public ExtIterable<String> toStrings() {
+        return map(new Fn1<T, String>() {
+            @Override
+            public String apply(T x) {
+                return x.toString();
+            }
+        });
+    }
 
     /**
      * Infinitely wraps the list of items.
      * <p/>
      * Example: a, b => a, b, a, b, a, b, ...
      */
-    ExtIterable<T> wrap();
+    public ExtIterable<T> wrap() {
+        return from(new ImmutableIterator<T>() {
+            List<T> coll = new LinkedList<T>();
+            Iterator<T> it = iterator;
+            boolean isLoaded = false;
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public T next() {
+                T x;
+                if (it.hasNext()) {
+                    x = it.next();
+                    if (!isLoaded)
+                        coll.add(x);
+                } else {
+                    isLoaded = true;
+                    it = coll.iterator();
+                    x = it.next();
+                }
+                return x;
+            }
+        });
+    }
 
     /**
      * Places items into a tuple
      */
-    <S> ExtIterable<Tuple2<T, S>> zip(Iterable<S> items);
+    public <S> ExtIterable<Tuple2<T, S>> zip(final Iterable<S> xs) {
+        final Iterator<S> it = xs.iterator();
+        return from(new ImmutableIterator<Tuple2<T, S>>() {
+            @Override
+            public boolean hasNext() {
+                return it.hasNext() && iterator.hasNext();
+            }
+
+            @Override
+            public Tuple2<T, S> next() {
+                return new Tuple2<T, S>(iterator.next(), it.next());
+            }
+        });
+    }
 
     /**
      * Places items into a tuple
      */
-    <A, B> ExtIterable<Tuple3<T, A, B>> zip(Iterable<A> a, Iterable<B> b);
+    public <A, B> ExtIterable<Tuple3<T, A, B>> zip(final Iterable<A> a, final Iterable<B> b) {
+        final Iterator<A> a_ = a.iterator();
+        final Iterator<B> b_ = b.iterator();
+        return from(new ImmutableIterator<Tuple3<T, A, B>>() {
+            @Override
+            public boolean hasNext() {
+                return a_.hasNext() && b_.hasNext() && iterator.hasNext();
+            }
+
+            @Override
+            public Tuple3<T, A, B> next() {
+                return new Tuple3<T, A, B>(iterator.next(), a_.next(), b_.next());
+            }
+        });
+    }
 
     /**
      * Places items into a tuple
      */
-    <A, B, C> ExtIterable<Tuple4<T, A, B, C>> zip(Iterable<A> a, Iterable<B> b, Iterable<C> c);
+    public <A, B, C> ExtIterable<Tuple4<T, A, B, C>> zip(final Iterable<A> a,
+                                                         final Iterable<B> b,
+                                                         final Iterable<C> c) {
+        final Iterator<A> a_ = a.iterator();
+        final Iterator<B> b_ = b.iterator();
+        final Iterator<C> c_ = c.iterator();
+        return from(new ImmutableIterator<Tuple4<T, A, B, C>>() {
+            @Override
+            public boolean hasNext() {
+                return a_.hasNext() && b_.hasNext() && c_.hasNext() && iterator.hasNext();
+            }
 
-    /**
-     * Returns first item that satisfies predicate
-     */
-    T first(Pred1<T> predicate);
-
-    /**
-     * Returns first item
-     */
-    T head();
+            @Override
+            public Tuple4<T, A, B, C> next() {
+                return new Tuple4<T, A, B, C>(iterator.next(), a_.next(), b_.next(), c_.next());
+            }
+        });
+    }
 }

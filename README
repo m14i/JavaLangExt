@@ -3,7 +3,7 @@ JavaLangExt (JLE)
 
 Author: Michael Stöckli
 
-A collection of tools for Java inspired by features found in other languages. 
+A coll of tools for Java inspired by features found in other languages.
 
 - null coalesce: 
 	in C# 	> result = obj1 ?? obj2

@@ -19,6 +19,6 @@ public class Tuple2<A, B> {
 
     @Override
     public String toString() {
-        return ":" + item1 + ":" + item2;
+        return "(" + item1 + "," + item2 + ")";
     }
 }

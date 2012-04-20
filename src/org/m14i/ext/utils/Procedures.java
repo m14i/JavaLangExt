@@ -1,13 +1,13 @@
 package org.m14i.ext.utils;
 
-import org.m14i.ext.methods.Proc1;
+import org.m14i.ext.methods.Proc;
 
 import java.io.PrintStream;
 
 public class Procedures {
 
-    public static <T> Proc1 println() {
-        return new Proc1<T>() {
+    public static <T> Proc println() {
+        return new Proc<T>() {
             @Override
             public void apply(T arg) {
                 System.out.println(arg);
@@ -15,12 +15,12 @@ public class Procedures {
         };
     }
 
-    public static <T> Proc1 print() {
+    public static <T> Proc print() {
         return print(System.out);
     }
 
-    public static <T> Proc1 print(final PrintStream printer) {
-        return new Proc1<T>() {
+    public static <T> Proc print(final PrintStream printer) {
+        return new Proc<T>() {
             @Override
             public void apply(T arg) {
                 printer.print(arg);

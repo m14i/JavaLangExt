@@ -2,71 +2,122 @@ package org.m14i.ext;
 
 
 import org.m14i.ext.iterator.ExtIterable;
-import org.m14i.ext.iterator.ExtIterableImpl;
-import org.m14i.ext.methods.Func1;
+import org.m14i.ext.iterator.ImmutableIterator;
+import org.m14i.ext.methods.Fn1;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Iterator;
 
 public class Ext {
-    
+
+    public static <T> ExtIterable<T> from(Iterator<T> iterator) {
+        return new ExtIterable<T>(iterator);
+    }
+
     public static <T> ExtIterable<T> from(Iterable<T> iterable) {
-        return new ExtIterableImpl<T>(iterable);
+        return from(iterable.iterator());
     }
 
     public static <T> ExtIterable<T> from(T... xs) {
-        return new ExtIterableImpl<T>(Arrays.asList(xs));
+        return from(Arrays.asList(xs));
     }
 
-    public static ExtIterable<Byte> from(byte[] xs) {
-        Collection<Byte> bytes = new LinkedList<Byte>();
-        for (byte x : xs)
-            bytes.add(x);
+    public static ExtIterable<Byte> from(final byte[] xs) {
+        return from(new ImmutableIterator<Byte>() {
+            int count = 0;
 
-        return from(bytes);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Byte next() {
+                return xs[count++];
+            }
+        });
     }
 
-    public static ExtIterable<Character> from(char[] xs) {
-        Collection<Character> chars = new LinkedList<Character>();
-        for (char x : xs)
-            chars.add(x);
+    public static ExtIterable<Character> from(final char[] xs) {
+        return from(new ImmutableIterator<Character>() {
+            int count = 0;
 
-        return from(chars);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Character next() {
+                return xs[count++];
+            }
+        });
     }
 
-    public static ExtIterable<Integer> from(int[] xs) {
-        Collection<Integer> ints = new LinkedList<Integer>();
-        for (int x : xs)
-            ints.add(x);
+    public static ExtIterable<Integer> from(final int[] xs) {
+        return from(new ImmutableIterator<Integer>() {
+            int count = 0;
 
-        return from(ints);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Integer next() {
+                return xs[count++];
+            }
+        });
     }
 
-    public static ExtIterable<Long> from(long[] xs) {
-        Collection<Long> longs = new LinkedList<Long>();
-        for (long x : xs)
-            longs.add(x);
+    public static ExtIterable<Long> from(final long[] xs) {
+        return from(new ImmutableIterator<Long>() {
+            int count = 0;
 
-        return from(longs);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Long next() {
+                return xs[count++];
+            }
+        });
     }
 
-    public static ExtIterable<Float> from(float[] xs) {
-        Collection<Float> floats = new LinkedList<Float>();
-        for (float x : xs)
-            floats.add(x);
+    public static ExtIterable<Float> from(final float[] xs) {
+        return from(new ImmutableIterator<Float>() {
+            int count = 0;
 
-        return from(floats);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Float next() {
+                return xs[count++];
+            }
+        });
     }
 
-    public static ExtIterable<Double> from(double[] xs) {
-        Collection<Double> doubles = new LinkedList<Double>();
-        for (double x : xs)
-            doubles.add(x);
+    public static ExtIterable<Double> from(final double[] xs) {
+        return from(new ImmutableIterator<Double>() {
+            int count = 0;
 
-        return from(doubles);
+            @Override
+            public boolean hasNext() {
+                return count < xs.length;
+            }
+
+            @Override
+            public Double next() {
+                return xs[count++];
+            }
+        });
     }
 
     public static <T> T coalesce(T... xs) {
@@ -117,7 +168,7 @@ public class Ext {
         return result;
     }
 
-    public static <Z, T extends Closeable> Z tryWith(T x, Func1<T, Z> func) throws IOException {
+    public static <Z, T extends Closeable> Z tryWith(T x, Fn1<T, Z> func) throws IOException {
         Z result = null;
         try {
             result = func.apply(x);
