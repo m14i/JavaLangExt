@@ -1,5 +1,10 @@
 package org.m14i.ext.iterator;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.m14i.ext.Ext.from;
+
 import org.junit.Test;
 import org.m14i.ext.Ext;
 import org.m14i.ext.methods.Fn1;
@@ -10,10 +15,11 @@ import org.m14i.ext.tuples.Tuple2;
 import org.m14i.ext.utils.Functions;
 import org.m14i.ext.utils.Iterators;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
-import static org.m14i.ext.Ext.from;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ExtIterableTest {
     @Test
@@ -118,7 +124,7 @@ public class ExtIterableTest {
 
     @Test
     public void testDrop() throws Exception {
-        final Integer expected[] = {95, 96, 97, 98, 99};
+        final Integer expected[] = { 95, 96, 97, 98, 99 };
 
         Iterators.range(0, 100).drop(95).each(new Proc<Integer>() {
             int count = 0;
@@ -228,7 +234,7 @@ public class ExtIterableTest {
 
     @Test
     public void testTake() throws Exception {
-        final Integer expected[] = {30, 31, 32};
+        final Integer expected[] = { 30, 31, 32 };
 
         Iterators.range(30, 100).take(3).each(new Proc<Integer>() {
             int count = 0;
@@ -368,6 +374,18 @@ public class ExtIterableTest {
                 });
 
         assertTrue(2 == first.get1());
+    }
+
+    @Test
+    public void testEnumerate() throws Exception {
+        long[] nums = { 0, 1, 2, 3, 4 };
+
+        from(nums).enumerate().each(new Proc<Tuple2<Long, Long>>() {
+            @Override
+            public void apply(Tuple2<Long, Long> x) {
+                assertEquals(x.get2(), x.get1());
+            }
+        });
     }
 
 }

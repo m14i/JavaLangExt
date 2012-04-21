@@ -1,6 +1,7 @@
 package org.m14i.ext.utils;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class FunctionsTest {
@@ -13,7 +14,7 @@ public class FunctionsTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -24,7 +25,7 @@ public class FunctionsTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class FunctionsTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -44,7 +45,7 @@ public class FunctionsTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -54,6 +55,6 @@ public class FunctionsTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

@@ -1,5 +1,7 @@
 package org.m14i.ext.iterator;
 
+import static org.m14i.ext.Ext.from;
+
 import org.m14i.ext.methods.Fn1;
 import org.m14i.ext.methods.Fn2;
 import org.m14i.ext.methods.Pred;
@@ -9,9 +11,15 @@ import org.m14i.ext.tuples.Tuple3;
 import org.m14i.ext.tuples.Tuple4;
 import org.m14i.ext.utils.Functions;
 
-import java.util.*;
-
-import static org.m14i.ext.Ext.from;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class ExtIterable<T> implements Iterable<T> {
 
@@ -91,6 +99,22 @@ public class ExtIterable<T> implements Iterable<T> {
     }
 
     /**
+     * Enumerate items in list
+     * Example:
+     * "a", "b", "c" -> (0, "a"), (1, "b"), (2, "c")
+     */
+    public ExtIterable<Tuple2<Long, T>> enumerate() {
+        return map(new Fn1<T, Tuple2<Long, T>>() {
+            long count = 0;
+
+            @Override
+            public Tuple2<Long, T> apply(T x) {
+                return new Tuple2<Long, T>(count++, x);
+            }
+        });
+    }
+
+    /**
      * Returns first item that satisfies predicate
      */
     public T first(final Pred<T> predicate) {
@@ -100,7 +124,7 @@ public class ExtIterable<T> implements Iterable<T> {
     /**
      * Convert items to string and join using separator
      */
-    public String join(String separator){
+    public String join(String separator) {
         return toStrings().reduce("", Functions.join(separator));
     }
 
@@ -226,8 +250,8 @@ public class ExtIterable<T> implements Iterable<T> {
      * Map an item of a type to another type
      */
     public <A, B, C> ExtIterable<Tuple3<A, B, C>> map(final Fn1<T, A> a,
-                                                      final Fn1<T, B> b,
-                                                      final Fn1<T, C> c) {
+            final Fn1<T, B> b,
+            final Fn1<T, C> c) {
         return from(new ImmutableIterator<Tuple3<A, B, C>>() {
             @Override
             public boolean hasNext() {
@@ -246,9 +270,9 @@ public class ExtIterable<T> implements Iterable<T> {
      * Map an item of a type to another type
      */
     public <A, B, C, D> ExtIterable<Tuple4<A, B, C, D>> map(final Fn1<T, A> a,
-                                                            final Fn1<T, B> b,
-                                                            final Fn1<T, C> c,
-                                                            final Fn1<T, D> d) {
+            final Fn1<T, B> b,
+            final Fn1<T, C> c,
+            final Fn1<T, D> d) {
         return from(new ImmutableIterator<Tuple4<A, B, C, D>>() {
             @Override
             public boolean hasNext() {
@@ -378,8 +402,8 @@ public class ExtIterable<T> implements Iterable<T> {
      * Places items into a tuple
      */
     public <A, B, C> ExtIterable<Tuple4<T, A, B, C>> zip(final Iterable<A> a,
-                                                         final Iterable<B> b,
-                                                         final Iterable<C> c) {
+            final Iterable<B> b,
+            final Iterable<C> c) {
         final Iterator<A> a_ = a.iterator();
         final Iterator<B> b_ = b.iterator();
         final Iterator<C> c_ = c.iterator();
