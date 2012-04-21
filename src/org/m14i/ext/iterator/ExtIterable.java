@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ExtIterable<T> implements Iterable<T> {
@@ -119,6 +121,28 @@ public class ExtIterable<T> implements Iterable<T> {
      */
     public T first(final Pred<T> predicate) {
         return filter(predicate).head();
+    }
+
+    /**
+     * Group items according to emitted key
+     */
+    public <K> Map<K, List<T>> group(final Fn1<T, K> emitKey) {
+        return reduce(new HashMap<K, List<T>>(), new Fn2<Map<K, List<T>>, T, Map<K, List<T>>>() {
+            @Override
+            public Map<K, List<T>> apply(Map<K, List<T>> acc, T x) {
+                K key = emitKey.apply(x);
+                List<T> list = acc.get(key);
+
+                if (list == null) {
+                    list = new ArrayList<T>();
+                    acc.put(key, list);
+                }
+
+                list.add(x);
+
+                return acc;
+            }
+        });
     }
 
     /**

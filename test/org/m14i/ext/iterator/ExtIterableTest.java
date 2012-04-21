@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ExtIterableTest {
     @Test
@@ -386,6 +387,19 @@ public class ExtIterableTest {
                 assertEquals(x.get2(), x.get1());
             }
         });
+    }
+
+    @Test
+    public void testGroup() throws Exception {
+        Map<Integer,List<Integer>> group = from(1, 2, 3, 4, 5).group(new Fn1<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer arg) {
+                return arg % 2;
+            }
+        });
+
+        assertEquals(3, group.get(1).size());
+        assertEquals(2, group.get(0).size());
     }
 
 }
