@@ -1,7 +1,7 @@
-package jle.ext;
+package jle;
 
-import jle.ext.iterator.ExtIterable;
-import jle.ext.iterator.ImmutableIterator;
+import jle.iterator.ExtIterable;
+import jle.iterator.ImmutableIterator;
 
 import java.util.Arrays;
 import java.util.Collection;

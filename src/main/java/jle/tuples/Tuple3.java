@@ -1,4 +1,4 @@
-package jle.ext.tuples;
+package jle.tuples;
 
 public class Tuple3<A, B, C> extends Tuple2<A, B> {
     private C item3;

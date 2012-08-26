@@ -1,4 +1,4 @@
-package jle.ext.methods;
+package jle.methods;
 
 public interface Proc<T> {
     void apply(T arg);

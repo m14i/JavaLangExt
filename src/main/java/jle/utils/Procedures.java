@@ -1,6 +1,6 @@
-package jle.ext.utils;
+package jle.utils;
 
-import jle.ext.methods.Proc;
+import jle.methods.Proc;
 
 import java.io.PrintStream;
 

@@ -1,4 +1,4 @@
-package jle.ext.iterator;
+package jle.iterator;
 
 import java.util.Iterator;
 

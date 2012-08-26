@@ -1,9 +1,9 @@
-package jle.ext.utils;
+package jle.utils;
 
-import static jle.ext.Ext.from;
+import static jle.Ext.from;
 
-import jle.ext.iterator.ExtIterable;
-import jle.ext.iterator.ImmutableIterator;
+import jle.iterator.ExtIterable;
+import jle.iterator.ImmutableIterator;
 
 public class Iterators {
 

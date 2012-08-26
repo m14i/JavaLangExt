@@ -1,9 +1,9 @@
-package jle.ext.utils;
+package jle.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
-import jle.ext.methods.Fn2;
-import jle.ext.tuples.Tuple2;
+import jle.methods.Fn2;
+import jle.tuples.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;

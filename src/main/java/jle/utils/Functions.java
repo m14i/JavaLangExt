@@ -1,6 +1,6 @@
-package jle.ext.utils;
+package jle.utils;
 
-import jle.ext.methods.Fn2;
+import jle.methods.Fn2;
 
 public class Functions {
 

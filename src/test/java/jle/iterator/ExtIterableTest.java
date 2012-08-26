@@ -1,18 +1,18 @@
-package jle.ext.iterator;
+package jle.iterator;
 
-import static jle.ext.Ext.from;
-import static jle.ext.utils.Iterators.range;
+import static jle.Ext.from;
+import static jle.utils.Iterators.range;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import jle.ext.Ext;
-import jle.ext.methods.Fn1;
-import jle.ext.methods.Fn2;
-import jle.ext.methods.Pred;
-import jle.ext.methods.Proc;
-import jle.ext.tuples.Tuple2;
-import jle.ext.utils.Iterators;
+import jle.Ext;
+import jle.methods.Fn1;
+import jle.methods.Fn2;
+import jle.methods.Pred;
+import jle.methods.Proc;
+import jle.tuples.Tuple2;
+import jle.utils.Iterators;
 import org.junit.Test;
 
 import java.util.ArrayList;

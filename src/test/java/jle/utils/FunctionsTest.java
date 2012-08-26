@@ -1,4 +1,4 @@
-package jle.ext.utils;
+package jle.utils;
 
 import static org.junit.Assert.assertEquals;
 

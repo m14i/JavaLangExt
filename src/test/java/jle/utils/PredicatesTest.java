@@ -1,6 +1,6 @@
-package jle.ext.utils;
+package jle.utils;
 
-import static jle.ext.Ext.from;
+import static jle.Ext.from;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

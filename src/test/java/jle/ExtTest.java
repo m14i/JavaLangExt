@@ -1,13 +1,13 @@
-package jle.ext;
+package jle;
 
-import static jle.ext.Ext.coalesce;
-import static jle.ext.Ext.humanize;
-import static jle.ext.Ext.isNullOrEmpty;
-import static jle.ext.Ext.str;
-import static jle.ext.Ext.tryParseDouble;
-import static jle.ext.Ext.tryParseFloat;
-import static jle.ext.Ext.tryParseInt;
-import static jle.ext.Ext.tryParseLong;
+import static jle.Ext.coalesce;
+import static jle.Ext.humanize;
+import static jle.Ext.isNullOrEmpty;
+import static jle.Ext.str;
+import static jle.Ext.tryParseDouble;
+import static jle.Ext.tryParseFloat;
+import static jle.Ext.tryParseInt;
+import static jle.Ext.tryParseLong;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

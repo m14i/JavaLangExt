@@ -1,6 +1,6 @@
-package jle.ext.utils;
+package jle.utils;
 
-import jle.ext.methods.Pred;
+import jle.methods.Pred;
 
 public class Predicates {
 

@@ -1,16 +1,16 @@
-package jle.ext.iterator;
+package jle.iterator;
 
-import static jle.ext.Ext.from;
+import static jle.Ext.from;
 
-import jle.ext.methods.Fn1;
-import jle.ext.methods.Fn2;
-import jle.ext.methods.Pred;
-import jle.ext.methods.Proc;
-import jle.ext.tuples.Tuple2;
-import jle.ext.tuples.Tuple3;
-import jle.ext.tuples.Tuple4;
-import jle.ext.utils.Functions;
-import jle.ext.utils.Predicates;
+import jle.methods.Fn1;
+import jle.methods.Fn2;
+import jle.methods.Pred;
+import jle.methods.Proc;
+import jle.tuples.Tuple2;
+import jle.tuples.Tuple3;
+import jle.tuples.Tuple4;
+import jle.utils.Functions;
+import jle.utils.Predicates;
 
 import java.util.ArrayList;
 import java.util.Collection;
