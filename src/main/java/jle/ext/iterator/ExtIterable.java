@@ -161,7 +161,7 @@ public class ExtIterable<T> implements Iterable<T> {
      * Convert items to string and join using separator
      */
     public String join(String separator) {
-        return toStrings().reduce(new StringBuffer(), Functions.join(separator)).toString();
+        return toStrings().reduce(new StringBuilder(), Functions.join(separator)).toString();
     }
 
     /**

@@ -4,13 +4,13 @@ import jle.ext.methods.Fn2;
 
 public class Functions {
 
-    public static Fn2<StringBuffer, String, StringBuffer> join(final String separator) {
-        return new Fn2<StringBuffer, String, StringBuffer>() {
+    public static Fn2<StringBuilder, String, StringBuilder> join(final String separator) {
+        return new Fn2<StringBuilder, String, StringBuilder>() {
 
             boolean first = true;
 
             @Override
-            public StringBuffer apply(StringBuffer acc, String x) {
+            public StringBuilder apply(StringBuilder acc, String x) {
                 if (first) {
                     first = false;
                     return acc.append(x);
