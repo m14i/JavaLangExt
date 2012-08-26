@@ -1,4 +1,3 @@
-
         _/_/_/_/  _/      _/  _/_/_/_/_/
        _/          _/  _/        _/
       _/_/_/        _/          _/
@@ -10,8 +9,9 @@
 is a small library that contains utility functions to help the programmer
 do more with less code.
 
-* LINQ style chaining
+* LINQ style operations
    * from(coll).map(..).group(..).join(..)
+   * is lazy
 * Helper methods
    * coalesce
    * humanize
