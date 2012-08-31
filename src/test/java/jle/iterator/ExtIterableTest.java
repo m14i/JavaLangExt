@@ -13,6 +13,7 @@ import jle.methods.Pred;
 import jle.methods.Proc;
 import jle.tuples.Tuple2;
 import jle.utils.Iterators;
+import jle.utils.Predicates;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -158,6 +159,22 @@ public class ExtIterableTest {
       for (String x : it)
          assertTrue(!x.equals("b"));
    }
+
+    @Test
+    public void testFilterWithNulls() throws Exception {
+        Collection<String> strings = new LinkedList<String>();
+        strings.add("a");
+        strings.add("a");
+        strings.add(null);
+        strings.add(null);
+        strings.add("a");
+
+        List<String> xs = from(strings).filter(Predicates.<String>is(null)).toList();
+        assertEquals(2, xs.size());
+
+        for (String x : xs)
+            assertNull(x);
+    }
 
    @Test
    public void testReject() throws Exception {

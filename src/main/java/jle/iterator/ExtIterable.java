@@ -1,7 +1,5 @@
 package jle.iterator;
 
-import static jle.Ext.from;
-
 import jle.methods.Fn1;
 import jle.methods.Fn2;
 import jle.methods.Pred;
@@ -12,19 +10,9 @@ import jle.tuples.Tuple4;
 import jle.utils.Functions;
 import jle.utils.Predicates;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static jle.Ext.from;
 
 public class ExtIterable<T> implements Iterable<T> {
 
@@ -50,7 +38,7 @@ public class ExtIterable<T> implements Iterable<T> {
      * Checks if any item satisfies the predicate
      */
     public boolean any(final Pred<T> predicate) {
-        return null != first(predicate);
+        return filter(predicate).iterator().hasNext();
     }
 
     /**
@@ -69,7 +57,7 @@ public class ExtIterable<T> implements Iterable<T> {
      * Returns first item
      */
     public T head() {
-        return iterator.hasNext() ? iterator.next() : null;
+        return iterator.next();
     }
 
     /**
@@ -214,6 +202,7 @@ public class ExtIterable<T> implements Iterable<T> {
      */
     public ExtIterable<T> filter(final Pred<T> predicate) {
         return from(new ImmutableIterator<T>() {
+            boolean hasNext = true;
             T xn = findNext();
 
             T findNext() {
@@ -222,12 +211,13 @@ public class ExtIterable<T> implements Iterable<T> {
                     if (predicate.apply(x))
                         return x;
                 }
+                hasNext = false;
                 return null;
             }
 
             @Override
             public boolean hasNext() {
-                return xn != null;
+                return hasNext;
             }
 
             @Override
