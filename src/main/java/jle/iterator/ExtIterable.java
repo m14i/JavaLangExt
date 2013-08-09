@@ -89,7 +89,7 @@ public class ExtIterable<T> implements Iterable<T> {
 
             @Override
             public Tuple2<Long, T> apply(T x) {
-                return new Tuple2<Long, T>(count++, x);
+                return Tuple2.make(count++, x);
             }
         });
     }
@@ -113,7 +113,7 @@ public class ExtIterable<T> implements Iterable<T> {
             Tuple2<K, List<T>> tuple = lookup.get(key);
 
             if (tuple == null) {
-                tuple = new Tuple2<K, List<T>>(key, new ArrayList<T>());
+                tuple = Tuple2.make(key, (List<T>) new ArrayList<T>());
                 lookup.put(key, tuple);
             }
 
@@ -135,7 +135,7 @@ public class ExtIterable<T> implements Iterable<T> {
             Tuple2<K, Set<T>> tuple = lookup.get(key);
 
             if (tuple == null) {
-                tuple = new Tuple2<K, Set<T>>(key, new HashSet<T>());
+                tuple = Tuple2.make(key, (Set<T>) new HashSet<T>());
                 lookup.put(key, tuple);
             }
 
@@ -274,7 +274,7 @@ public class ExtIterable<T> implements Iterable<T> {
             @Override
             public Tuple2<A, B> next() {
                 T x = iterator.next();
-                return new Tuple2<A, B>(a.apply(x), b.apply(x));
+                return Tuple2.make(a.apply(x), b.apply(x));
             }
         });
     }
@@ -294,7 +294,7 @@ public class ExtIterable<T> implements Iterable<T> {
             @Override
             public Tuple3<A, B, C> next() {
                 T x = iterator.next();
-                return new Tuple3<A, B, C>(a.apply(x), b.apply(x), c.apply(x));
+                return Tuple3.make(a.apply(x), b.apply(x), c.apply(x));
             }
         });
     }
@@ -315,7 +315,7 @@ public class ExtIterable<T> implements Iterable<T> {
             @Override
             public Tuple4<A, B, C, D> next() {
                 T x = iterator.next();
-                return new Tuple4<A, B, C, D>(a.apply(x), b.apply(x), c.apply(x), d.apply(x));
+                return Tuple4.make(a.apply(x), b.apply(x), c.apply(x), d.apply(x));
             }
         });
     }
@@ -425,7 +425,7 @@ public class ExtIterable<T> implements Iterable<T> {
 
             @Override
             public Tuple2<T, S> next() {
-                return new Tuple2<T, S>(iterator.next(), it.next());
+                return Tuple2.make(iterator.next(), it.next());
             }
         });
     }
@@ -444,7 +444,7 @@ public class ExtIterable<T> implements Iterable<T> {
 
             @Override
             public Tuple3<T, A, B> next() {
-                return new Tuple3<T, A, B>(iterator.next(), a_.next(), b_.next());
+                return Tuple3.make(iterator.next(), a_.next(), b_.next());
             }
         });
     }
@@ -466,7 +466,7 @@ public class ExtIterable<T> implements Iterable<T> {
 
             @Override
             public Tuple4<T, A, B, C> next() {
-                return new Tuple4<T, A, B, C>(iterator.next(), a_.next(), b_.next(), c_.next());
+                return Tuple4.make(iterator.next(), a_.next(), b_.next(), c_.next());
             }
         });
     }
@@ -506,7 +506,7 @@ public class ExtIterable<T> implements Iterable<T> {
         return group(emitKey).map(new Fn1<Tuple2<K, List<T>>, Tuple2<K, Integer>>() {
             @Override
             public Tuple2<K, Integer> apply(Tuple2<K, List<T>> tuple) {
-                return new Tuple2<K, Integer>(tuple._1(), tuple._2().size());
+                return Tuple2.make(tuple._1(), tuple._2().size());
             }
         });
     }

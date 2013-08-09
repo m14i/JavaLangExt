@@ -1,9 +1,9 @@
 package jle.utils;
 
+import org.junit.Test;
+
 import static jle.Ext.from;
 import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
 
 public class PredicatesTest {
     @Test

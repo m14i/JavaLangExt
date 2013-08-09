@@ -1,15 +1,15 @@
 package jle.utils;
 
-import org.junit.Assert;
-import org.junit.Test;
 import jle.methods.Fn2;
 import jle.tuples.Tuple2;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 public class IteratorsTest {
@@ -18,12 +18,18 @@ public class IteratorsTest {
         return new Fn2<Integer, Tuple2<T, T>, Integer>() {
             @Override
             public Integer apply(Integer acc, Tuple2<T, T> arg) {
-                System.out.println(arg);
+                Con.println(arg);
                 Assert.assertEquals(arg._1(), arg._2());
                 return acc + 1;
             }
         };
     }
+
+    @Before
+    public void setUp() {
+        Con.setPrintEnabled(false);
+    }
+
 
     @Test
     public void testRepeat() throws Exception {
