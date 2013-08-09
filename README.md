@@ -1,23 +1,15 @@
-        _/_/_/_/  _/      _/  _/_/_/_/_/
-       _/          _/  _/        _/
-      _/_/_/        _/          _/
-     _/          _/  _/        _/
-    _/_/_/_/  _/      _/      _/
-
-
 # Java Lang Ext
+
 is a small library that contains utility functions to help the programmer
-do more with less code.
+do more with less code. Like Guava, I guess, but with tuples.
 
 * LINQ style operations
    * from(coll).map(..).group(..).join(..)
    * is lazy
 * Helper methods
    * coalesce
-   * humanize
    * str
    * isNullOrEmpty
-   * tryParseNumber
 
 
 ## HOW DO I...?
