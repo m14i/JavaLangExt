@@ -65,6 +65,7 @@ public class ExtTest {
         assertFalse(isNullOrEmpty(something));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testIsNullOrEmptyMap() throws Exception {
         Map nullish = null;
@@ -78,6 +79,7 @@ public class ExtTest {
         assertFalse(isNullOrEmpty(something));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testIsNullOrEmptyCollection() throws Exception {
         Collection nullish = null;
