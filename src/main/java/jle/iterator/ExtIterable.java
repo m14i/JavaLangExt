@@ -68,6 +68,19 @@ public class ExtIterable<T> implements Iterable<T> {
     }
 
     /**
+     * Cast items to class of type Z
+     */
+    public <Z> ExtIterable<Z> as(Class<Z> clazz) {
+        return map(new Fn1<T, Z>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public Z apply(T item) {
+                return (Z) item;
+            }
+        });
+    }
+
+    /**
      * Returns the number of items that satisfy the predicate
      */
     public Long count(final Pred<T> predicate) {
@@ -260,6 +273,46 @@ public class ExtIterable<T> implements Iterable<T> {
      */
     public ExtIterable<T> reject(final Pred<T> predicate) {
         return filter(Predicates.invert(predicate));
+    }
+
+    /**
+     * Expand sub-iterables into a single iterable.
+     * Note that nulls in the main iterable are removed by this method.
+     *
+     * Example:
+     * [null, [1, 2], null, [5, null]] -> [1, 2, 5, null]
+     */
+    public <Z> ExtIterable<Z> flatten() {
+        return from(new ImmutableIterator<Z>() {
+
+            Iterator<Z> deep = null;
+
+            @Override
+            public boolean hasNext() {
+                if (deep == null || !deep.hasNext())
+                    deep = nextIterator();
+
+                return deep != null && deep.hasNext();
+            }
+
+            @SuppressWarnings("unchecked")
+            Iterator<Z> nextIterator() {
+                T next = null;
+
+                while (next == null && iterator.hasNext())
+                    next = iterator.next();
+
+                if (next instanceof Iterable)
+                    return ((Iterable<Z>) next).iterator();
+                else
+                    return null;
+            }
+
+            @Override
+            public Z next() {
+                return deep.next();
+            }
+        });
     }
 
     /**

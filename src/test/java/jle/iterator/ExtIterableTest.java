@@ -513,4 +513,45 @@ public class ExtIterableTest {
         });
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testAsCast() throws Exception {
+        List<Integer> actual = from(1L, 2L, 3L, 4L)
+                .as(Object.class)
+                .as(Integer.class)
+                .toList();
+
+        assertFalse(actual.get(0) instanceof Integer);
+    }
+
+    @Test
+    public void testFlattenRemovesNull() throws Exception {
+        List<Integer> actual = from(1, 2, 3, 4).map(new Fn1<Integer, List<Integer>>() {
+            @Override
+            public List<Integer> apply(Integer item) {
+                if (item == 3)
+                    return null;
+
+                return Arrays.asList(item, item);
+            }
+        }).flatten().as(Integer.class).toList();
+
+        assertEquals(Arrays.asList(1, 1, 2, 2, 4, 4), actual);
+    }
+
+    @Test
+    public void testFlattenPreservesDeepNull() throws Exception {
+        List<Integer> actual = from(1, 2, 3, 4).map(new Fn1<Integer, List<Integer>>() {
+            @Override
+            public List<Integer> apply(Integer item) {
+                if (item == 3)
+                    return Arrays.asList(item, null, item);
+
+                return Arrays.asList(item, item);
+            }
+        }).flatten().as(Integer.class).toList();
+
+        assertEquals(Arrays.asList(1, 1, 2, 2, 3, null, 3, 4, 4), actual);
+    }
+
 }
