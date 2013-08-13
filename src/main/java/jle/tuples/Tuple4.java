@@ -1,11 +1,8 @@
-package jle.tuples;
-
-/*
- * #%L
- * JavaLangExt
- * %%
- * Copyright (C) 2011 - 2013 Michael Stöckli
- * %%
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2011 Michael Stöckli
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,8 +20,9 @@ package jle.tuples;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * #L%
  */
+package jle.tuples;
+
 
 public class Tuple4<A, B, C, D> extends Tuple3<A, B, C> {
 
