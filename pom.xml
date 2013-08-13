@@ -18,7 +18,7 @@
     <developers>
         <developer>
             <id>m14i</id>
-            <name>Michael Stöckli</name>
+            <name>Michael Stoeckli</name>
             <email>michael.stoeckli@gmail.com</email>
             <url>https://github.com/m14i</url>
             <timezone>GMT+1</timezone>
@@ -81,6 +81,14 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <version>1.5</version>
+                <configuration>
+                    <organizationName>Michael Stoeckli</organizationName>
+                    <licenseName>mit</licenseName>
+                    <roots>
+                        <root>src/main/java</root>
+                        <root>src/test/java</root>
+                    </roots>
+                </configuration>
                 <executions>
                     <execution>
                         <id>first</id>
@@ -88,16 +96,22 @@
                             <goal>update-file-header</goal>
                         </goals>
                         <phase>process-sources</phase>
-                        <configuration>
-                            <organizationName>Michael Stöckli</organizationName>
-                            <licenseName>mit</licenseName>
-                            <roots>
-                                <root>src/main/java</root>
-                                <root>src/test/java</root>
-                            </roots>
-                        </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <version>1.4</version>
             </plugin>
         </plugins>
     </build>
